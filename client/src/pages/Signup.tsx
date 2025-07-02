@@ -7,9 +7,22 @@ const Signup: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSignup = () => {
-    // TODO: Implement signup logic
+    if (password.length < 6) {
+      setErrorMessage("Password supposed to be at least 6 characters long");
+      return;
+    }
+    if (password != confirmPassword) {
+      setErrorMessage("Failed to confirm password");
+      return;
+    }
+    if (!email.includes("@") || !email.includes(".")) {
+      setErrorMessage("Please enter a valid email address");
+      return;
+    }
+    //TODO: api call
     console.log("Signup:", { fullName, email, password, confirmPassword });
   };
 
@@ -55,6 +68,11 @@ const Signup: React.FC = () => {
               value={confirmPassword}
               onChange={setConfirmPassword}
             />
+            {errorMessage && (
+              <div className="text-red-600 text-sm font-medium px-2 md:px-0 pt-2">
+                {errorMessage}
+              </div>
+            )}
           </div>
 
           <div className="px-2 md:px-0 py-5">
