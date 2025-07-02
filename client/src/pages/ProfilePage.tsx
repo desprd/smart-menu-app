@@ -1,0 +1,57 @@
+import React, { useState } from "react";
+import FormInput from "../components/FormInput";
+import FormSelect from "../components/FormSelect";
+import FormTextarea from "../components/FormTextarea";
+import Sidebar from "../components/Sidebar";
+import { he } from "react-day-picker/locale";
+
+const ProfilePage: React.FC = () => {
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [age, setAge] = useState("");
+  return (
+    <div className="relative flex min-h-screen flex-col bg-white group/design-root overflow-x-hidden font-lexend">
+      <div className="layout-container flex h-full grow flex-col">
+        <div className="gap-1 px-6 flex flex-1 justify-center py-5">
+          <Sidebar />
+
+          <main className="layout-content-container flex flex-col max-w-full flex-1">
+            <div className="p-4">
+              <h2 className="text-[#111714] text-2xl sm:text-3xl font-bold">
+                Your Profile
+              </h2>
+            </div>
+
+            <FormInput
+              value={weight}
+              onChange={setWeight}
+              label="Weight (kg)"
+            />
+            <FormInput
+              value={height}
+              onChange={setHeight}
+              label="Height (cm)"
+            />
+            <FormInput value={age} onChange={setAge} label="Age" />
+            <FormSelect
+              label="Activity Level"
+              options={["", "Low", "Moderate", "High"]}
+            />
+            <FormSelect
+              label="Your goals"
+              options={["", "Сut", "Maintenance", "Bulk"]}
+            />
+
+            <div className="flex px-4 py-3">
+              <button className="cursor-pointer rounded-xl bg-[#38e07b] text-[#111714] h-10 px-4 text-sm font-bold tracking-wide">
+                Update Profile
+              </button>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;
