@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import FormInput from "../components/FormInput";
 import FormSelect from "../components/FormSelect";
-import FormTextarea from "../components/FormTextarea";
 import Sidebar from "../components/Sidebar";
-import { he } from "react-day-picker/locale";
 
 const ProfilePage: React.FC = () => {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
+  const [activity, setActivity] = useState("");
+  const [goal, setGoal] = useState("");
+  const handleLogin = () => {
+    // Placeholder logic
+    alert(
+      `Logging in with: ${weight}, ${height}, ${age}, ${activity}, ${goal}`
+    );
+  };
   return (
     <div className="relative flex min-h-screen flex-col bg-white group/design-root overflow-x-hidden font-lexend">
       <div className="layout-container flex h-full grow flex-col">
@@ -20,6 +26,9 @@ const ProfilePage: React.FC = () => {
               <h2 className="text-[#111714] text-2xl sm:text-3xl font-bold">
                 Your Profile
               </h2>
+              <p className="text-[#648772] text-sm font-normal mt-2">
+                Update your personal information to tailor your menu.
+              </p>
             </div>
 
             <FormInput
@@ -34,16 +43,23 @@ const ProfilePage: React.FC = () => {
             />
             <FormInput value={age} onChange={setAge} label="Age" />
             <FormSelect
+              value={activity}
+              onChange={setActivity}
               label="Activity Level"
               options={["", "Low", "Moderate", "High"]}
             />
             <FormSelect
+              value={goal}
+              onChange={setGoal}
               label="Your goals"
               options={["", "Сut", "Maintenance", "Bulk"]}
             />
 
             <div className="flex px-4 py-3">
-              <button className="cursor-pointer rounded-xl bg-[#38e07b] text-[#111714] h-10 px-4 text-sm font-bold tracking-wide">
+              <button
+                onClick={handleLogin}
+                className="cursor-pointer rounded-xl bg-[#38e07b] text-[#111714] h-10 px-4 text-sm font-bold tracking-wide"
+              >
                 Update Profile
               </button>
             </div>
