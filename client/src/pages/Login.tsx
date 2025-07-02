@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import InputField from "../components/InputField";
-import ToggleSwitch from "../components/ToggleSwitch";
+
 import Header from "../components/Header";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = () => {
     // Placeholder logic
-    alert(`Logging in with: ${email}, ${password}, remember: ${rememberMe}`);
+    alert(`Logging in with: ${email}, ${password}`);
   };
 
   return (
@@ -32,24 +32,12 @@ function Login() {
           </h2>
 
           <div className="space-y-4 px-2 py-2">
-            <InputField
-              placeholder="Username or Email"
-              value={email}
-              onChange={setEmail}
-            />
+            <InputField placeholder="Email" value={email} onChange={setEmail} />
             <InputField
               placeholder="Password"
               type="password"
               value={password}
               onChange={setPassword}
-            />
-          </div>
-
-          <div className="flex items-center justify-between px-2 py-2">
-            <span className="text-base">Remember me</span>
-            <ToggleSwitch
-              checked={rememberMe}
-              onChange={() => setRememberMe((v) => !v)}
             />
           </div>
 
@@ -67,7 +55,7 @@ function Login() {
           </div>
 
           <div className="text-center text-sm text-[#648772] underline pt-2">
-            Don’t have an account? Sign up
+            <Link to={"/signup"}>Don’t have an account? Sign up</Link>
           </div>
         </div>
       </main>
