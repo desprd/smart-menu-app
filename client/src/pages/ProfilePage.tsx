@@ -9,11 +9,24 @@ const ProfilePage: React.FC = () => {
   const [age, setAge] = useState("");
   const [activity, setActivity] = useState("");
   const [goal, setGoal] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const handleLogin = () => {
-    // Placeholder logic
+    if (
+      isBlank(weight) ||
+      isBlank(height) ||
+      isBlank(age) ||
+      isBlank(activity) ||
+      isBlank(goal)
+    ) {
+      setErrorMessage("Fields are supposed to be not blank");
+      return;
+    }
     alert(
       `Logging in with: ${weight}, ${height}, ${age}, ${activity}, ${goal}`
     );
+  };
+  const isBlank = (str: string): boolean => {
+    return !str || /^\s*$/.test(str);
   };
   return (
     <div className="relative flex min-h-screen flex-col bg-white group/design-root overflow-x-hidden font-lexend">
@@ -30,6 +43,12 @@ const ProfilePage: React.FC = () => {
                 Update your personal information to tailor your menu.
               </p>
             </div>
+
+            {errorMessage && (
+              <div className="text-red-600 text-sm font-medium px-2 md:px-0 pt-2">
+                {errorMessage}
+              </div>
+            )}
 
             <FormInput
               value={weight}
