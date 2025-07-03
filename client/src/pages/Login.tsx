@@ -42,9 +42,11 @@ function Login() {
             />
           </div>
 
-          <div className="px-2 text-sm text-[#648772] underline pt-1 pb-3 cursor-pointer">
-            Forgot password?
-          </div>
+          <Link to={"/forgotpassword"}>
+            <div className="px-2 text-sm text-[#648772] underline pt-1 pb-3 cursor-pointer">
+              Forgot password?
+            </div>
+          </Link>
 
           <div className="px-2 py-3">
             <button

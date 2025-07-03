@@ -29,7 +29,7 @@ function About() {
 
         <div className="mt-8">
           <a
-            href="/"
+            href="/login"
             className="inline-block bg-[#38e07b] text-[#111714] font-bold px-6 py-3 rounded-xl hover:opacity-90 transition"
           >
             Get Started

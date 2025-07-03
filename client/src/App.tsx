@@ -8,6 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import Recipes from "./pages/Recipes";
 import Settings from "./pages/Settings";
 import Help from "./pages/Help";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/recipes" element={<Recipes />}></Route>
           <Route path="/settings" element={<Settings />}></Route>
           <Route path="/help" element={<Help />}></Route>
+          <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
