@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import FormInput from "../components/FormInput";
 import FormSelect from "../components/FormSelect";
 import Sidebar from "../components/Sidebar";
-
+import { isBlank } from "../utils/dataCheck";
 const ProfilePage: React.FC = () => {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
@@ -24,9 +24,6 @@ const ProfilePage: React.FC = () => {
     alert(
       `Logging in with: ${weight}, ${height}, ${age}, ${activity}, ${goal}`
     );
-  };
-  const isBlank = (str: string): boolean => {
-    return !str || /^\s*$/.test(str);
   };
   return (
     <div className="relative flex min-h-screen flex-col bg-white group/design-root overflow-x-hidden font-lexend">
