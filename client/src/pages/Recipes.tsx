@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import CheckBox from "../components/CheckBox";
 import FormSelect from "../components/FormSelect";
 import FormTextarea from "../components/FormTextarea";
+import SubmitButton from "../components/SubmitButton";
 
 const Recipes: React.FC = () => {
   const [isVegeterian, setIsVegeterian] = useState(false);
@@ -76,14 +77,10 @@ const Recipes: React.FC = () => {
             />
 
             {/* Submit */}
-            <div className="flex px-4 py-3 justify-end">
-              <button
-                onClick={handleSettingsChange}
-                className="cursor-pointer rounded-xl bg-[#38e07b] text-[#111714] h-10 px-4 text-sm font-bold tracking-[0.015em]"
-              >
-                Save Settings
-              </button>
-            </div>
+            <SubmitButton
+              label="Save Settings"
+              onClick={handleSettingsChange}
+            />
           </main>
         </div>
       </div>

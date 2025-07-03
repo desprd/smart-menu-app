@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import WeeklyMenu from "./pages/WeeklyMenu";
 import ProfilePage from "./pages/ProfilePage";
 import Recipes from "./pages/Recipes";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/menu" element={<WeeklyMenu />}></Route>
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/recipes" element={<Recipes />}></Route>
+          <Route path="/settings" element={<Settings />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
