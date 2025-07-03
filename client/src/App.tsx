@@ -7,6 +7,7 @@ import WeeklyMenu from "./pages/WeeklyMenu";
 import ProfilePage from "./pages/ProfilePage";
 import Recipes from "./pages/Recipes";
 import Settings from "./pages/Settings";
+import Help from "./pages/Help";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/recipes" element={<Recipes />}></Route>
           <Route path="/settings" element={<Settings />}></Route>
+          <Route path="/help" element={<Help />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
