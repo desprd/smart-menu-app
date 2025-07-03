@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import InputField from "../components/InputField";
 
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
-import { tr } from "react-day-picker/locale";
 
-function ForgotPassword() {
+const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSucceeded, setIsSucceeded] = useState<boolean>(true);
@@ -61,6 +59,6 @@ function ForgotPassword() {
       </main>
     </div>
   );
-}
+};
 
 export default ForgotPassword;

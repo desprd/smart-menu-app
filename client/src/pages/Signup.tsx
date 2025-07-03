@@ -45,6 +45,11 @@ const Signup: React.FC = () => {
           </h2>
 
           <div className="space-y-4 px-2 md:px-0">
+            {errorMessage && (
+              <div className="text-red-600 text-sm font-medium px-2 md:px-0 pt-2">
+                {errorMessage}
+              </div>
+            )}
             <InputField
               placeholder="Full name"
               value={fullName}
@@ -68,11 +73,6 @@ const Signup: React.FC = () => {
               value={confirmPassword}
               onChange={setConfirmPassword}
             />
-            {errorMessage && (
-              <div className="text-red-600 text-sm font-medium px-2 md:px-0 pt-2">
-                {errorMessage}
-              </div>
-            )}
           </div>
 
           <div className="px-2 md:px-0 py-5">
