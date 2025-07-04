@@ -78,7 +78,7 @@ const Signup: React.FC = () => {
           <div className="px-2 md:px-0 py-5">
             <button
               onClick={handleSignup}
-              className="w-full bg-[#38e07b] h-12 rounded-xl text-base font-bold tracking-wide text-[#111714] hover:opacity-90 transition"
+              className="cursor-pointer w-full bg-[#38e07b] h-12 rounded-xl text-base font-bold tracking-wide text-[#111714] hover:opacity-90 transition"
             >
               Sign Up
             </button>
