@@ -1,13 +1,11 @@
 package com.ilyaproject.smart_menu_server.controller;
 
-import com.ilyaproject.smart_menu_server.dto.GeneralResponse;
-import com.ilyaproject.smart_menu_server.dto.LoginRequestDTO;
-import com.ilyaproject.smart_menu_server.dto.SignUpRequestDTO;
-import com.ilyaproject.smart_menu_server.dto.AuthResponseDTO;
+import com.ilyaproject.smart_menu_server.dto.*;
 import com.ilyaproject.smart_menu_server.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,6 +33,17 @@ public class AuthenticationController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             GeneralResponse<AuthResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/verify")
+    public ResponseEntity<?>verify(Authentication authentication){
+        try {
+            VerifyResponseDTO verifyResponseDTO = service.verify(authentication);
+            GeneralResponse<VerifyResponseDTO> response = new GeneralResponse<>(true, verifyResponseDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            GeneralResponse<VerifyResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
