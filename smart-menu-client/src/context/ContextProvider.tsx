@@ -1,22 +1,12 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-
-interface ServerResponse {
-  success: boolean;
-  userdata: UserData;
-  errorMessage: string;
-}
-
-interface UserData {
-  username: string;
-  email: string;
-}
+import type { AuthUserData, AuthServerResponse } from "../types/auth";
 
 interface AuthContextType {
   username: string | null;
   email: string | null;
-  login: (data: UserData) => void;
+  login: (data: AuthUserData) => void;
   logout: () => void;
   verifyUser: () => Promise<void>;
 }
@@ -40,7 +30,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  const login = (userData: UserData) => {
+  const login = (userData: AuthUserData) => {
     setUsername(userData.username);
     setEmail(userData.email);
     localStorage.setItem("username", userData.username);
@@ -60,7 +50,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         logout();
         return;
       }
-      const response = await axios.get<ServerResponse>(
+      const response = await axios.get<AuthServerResponse>(
         `${API_URL}/auth/verify`,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -68,7 +58,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
       );
 
       if (response.data.success) {
-        login(response.data.userdata);
+        login(response.data.content);
       } else {
         console.log("Failed to verify ", response.data.errorMessage);
         logout();

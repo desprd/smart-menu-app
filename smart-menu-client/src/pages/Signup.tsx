@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import InputField from "../components/InputField";
+import type { AuthServerResponse } from "../types/auth";
+import axios from "axios";
+import { useAuth } from "../context/ContextProvider";
+
 const Signup: React.FC = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
+  const { login } = useAuth();
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (password.length < 6) {
       setErrorMessage("Password supposed to be at least 6 characters long");
       return;
@@ -22,8 +29,25 @@ const Signup: React.FC = () => {
       setErrorMessage("Please enter a valid email address");
       return;
     }
-    //TODO: api call
-    console.log("Signup:", { fullName, email, password, confirmPassword });
+    try {
+      const response = await axios.post<AuthServerResponse>(
+        `${API_URL}/auth/signup`,
+        {
+          username: fullName,
+          email,
+          password,
+        }
+      );
+      if (response.data.success && response.data.content.token) {
+        localStorage.setItem("token", response.data.content.token);
+        login(response.data.content);
+        navigate("/menu");
+      } else {
+        setErrorMessage(response.data.errorMessage);
+      }
+    } catch (error) {
+      console.error("Registration error ", error);
+    }
   };
 
   return (
