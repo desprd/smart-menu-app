@@ -52,4 +52,7 @@
         public Integer getId(){
             return user.getId();
         }
+        public User getUser(){
+            return user;
+        }
     }

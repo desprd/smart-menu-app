@@ -62,7 +62,15 @@ public class AuthenticationService {
         if (authentication == null){
             throw new AuthException("Something went wrong during validation");
         }
-        //TODO validation logic
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        var user = userDetails.getUser();
+        var token = jwtService.generateToken(userDetails);
+        return AuthResponseDTO
+                .builder()
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .token(token)
+                .build();
     }
 
 }

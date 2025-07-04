@@ -24,15 +24,18 @@ public class AuthenticationController {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }catch (Exception e){
             GeneralResponse<AuthResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/signup")
+    @PostMapping("/login")
     public ResponseEntity<?>login(@RequestBody LoginRequestDTO req){
         try {
-            AuthResponseDTO loginResponseDTO = service.
+            AuthResponseDTO loginResponseDTO = service.login(req);
+            GeneralResponse<AuthResponseDTO> response = new GeneralResponse<>(true, loginResponseDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
-
+            GeneralResponse<AuthResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 }
