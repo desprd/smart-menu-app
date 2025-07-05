@@ -7,6 +7,7 @@ const ProfilePage: React.FC = () => {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
+  const [sex, setSex] = useState("");
   const [activity, setActivity] = useState("");
   const [goal, setGoal] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -15,6 +16,7 @@ const ProfilePage: React.FC = () => {
       isBlank(weight) ||
       isBlank(height) ||
       isBlank(age) ||
+      isBlank(sex) ||
       isBlank(activity) ||
       isBlank(goal)
     ) {
@@ -58,6 +60,12 @@ const ProfilePage: React.FC = () => {
               label="Height (cm)"
             />
             <FormInput value={age} onChange={setAge} label="Age" />
+            <FormSelect
+              value={sex}
+              onChange={setSex}
+              label="Sex"
+              options={["", "Male", "Female"]}
+            />
             <FormSelect
               value={activity}
               onChange={setActivity}

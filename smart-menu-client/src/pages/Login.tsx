@@ -1,17 +1,37 @@
 import React, { useState } from "react";
 import InputField from "../components/InputField";
-
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import type { AuthServerResponse } from "../types/auth";
+import axios from "axios";
+import { useAuth } from "../context/ContextProvider";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const handleLogin = () => {
-    // Placeholder logic
-    alert(`Logging in with: ${email}, ${password}`);
+  const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
+  const { login } = useAuth();
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post<AuthServerResponse>(
+        `${API_URL}/auth/login`,
+        {
+          email,
+          password,
+        }
+      );
+      if (response.data.success && response.data.content.token) {
+        localStorage.setItem("token", response.data.content.token);
+        login(response.data.content);
+        navigate("/menu");
+      } else {
+        setErrorMessage(response.data.errorMessage);
+      }
+    } catch (error) {
+      console.error("Login error", error);
+    }
   };
 
   return (
@@ -33,6 +53,11 @@ function Login() {
           </h2>
 
           <div className="space-y-4 px-2 py-2">
+            {errorMessage && (
+              <div className="text-red-600 text-sm font-medium px-2 md:px-0 pt-2">
+                {errorMessage}
+              </div>
+            )}
             <InputField placeholder="Email" value={email} onChange={setEmail} />
             <InputField
               placeholder="Password"
@@ -51,7 +76,7 @@ function Login() {
           <div className="px-2 py-3">
             <button
               onClick={handleLogin}
-              className="w-full bg-[#38e07b] h-12 rounded-xl text-base font-bold tracking-wide text-[#111714]"
+              className="cursor-pointer w-full bg-[#38e07b] h-12 rounded-xl text-base font-bold tracking-wide text-[#111714]"
             >
               Log in
             </button>

@@ -10,6 +10,8 @@ import Settings from "./pages/Settings";
 import Help from "./pages/Help";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import ProtectedRoute from "./components/ProtectedRoute";
+import CreateProfilePage from "./pages/CreateProfilePage";
 
 function App() {
   return (
@@ -19,11 +21,54 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/" element={<About />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
-          <Route path="/menu" element={<WeeklyMenu />}></Route>
-          <Route path="/profile" element={<ProfilePage />}></Route>
-          <Route path="/recipes" element={<Recipes />}></Route>
-          <Route path="/settings" element={<Settings />}></Route>
-          <Route path="/help" element={<Help />}></Route>
+          <Route
+            path="/createprofile"
+            element={
+              <ProtectedRoute>
+                <CreateProfilePage />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/menu"
+            element={
+              <ProtectedRoute>
+                <WeeklyMenu />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/recipes"
+            element={
+              <ProtectedRoute>
+                <Recipes />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/help"
+            element={
+              <ProtectedRoute>
+                <Help />
+              </ProtectedRoute>
+            }
+          ></Route>
           <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
         </Routes>

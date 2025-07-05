@@ -2,6 +2,7 @@ package com.ilyaproject.smart_menu_server.controller;
 
 import com.ilyaproject.smart_menu_server.dto.*;
 import com.ilyaproject.smart_menu_server.service.AuthenticationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationService service;
     @PostMapping("/signup")
-    public ResponseEntity<?>signUp(@RequestBody SignUpRequestDTO req){
+    public ResponseEntity<?>signUp(@RequestBody @Valid SignUpRequestDTO req){
         try {
             AuthResponseDTO signUpResponseDTO = service.signUp(req);
             GeneralResponse<AuthResponseDTO> response = new GeneralResponse<>(true, signUpResponseDTO);
@@ -26,7 +27,7 @@ public class AuthenticationController {
         }
     }
     @PostMapping("/login")
-    public ResponseEntity<?>login(@RequestBody LoginRequestDTO req){
+    public ResponseEntity<?>login(@RequestBody @Valid LoginRequestDTO req){
         try {
             AuthResponseDTO loginResponseDTO = service.login(req);
             GeneralResponse<AuthResponseDTO> response = new GeneralResponse<>(true, loginResponseDTO);
