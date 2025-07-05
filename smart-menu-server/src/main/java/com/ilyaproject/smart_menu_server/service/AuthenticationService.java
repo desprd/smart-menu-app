@@ -6,6 +6,7 @@ import com.ilyaproject.smart_menu_server.dto.SignUpRequestDTO;
 import com.ilyaproject.smart_menu_server.dto.AuthResponseDTO;
 import com.ilyaproject.smart_menu_server.dto.VerifyResponseDTO;
 import com.ilyaproject.smart_menu_server.exception.AuthException;
+import com.ilyaproject.smart_menu_server.model.MenuSettings;
 import com.ilyaproject.smart_menu_server.model.ProfileInformation;
 import com.ilyaproject.smart_menu_server.model.Role;
 import com.ilyaproject.smart_menu_server.model.User;
@@ -42,6 +43,15 @@ public class AuthenticationService {
                 .activity("Moderate")
                 .goals("Maintenance")
                 .build();
+        var menuSettings = MenuSettings
+                .builder()
+                .isDairyFree(false)
+                .isGlutenFree(false)
+                .isNutFree(false)
+                .isVegetarian(false)
+                .cuisine("Any")
+                .excluded("")
+                .build();
         var user = User
                 .builder()
                 .username(username)
@@ -49,6 +59,7 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .password(encoder.encode(req.getPassword()))
                 .profileInformation(profileInfo)
+                .menuSettings(menuSettings)
                 .build();
         repository.save(user);
         var token = jwtService.generateToken(new CustomUserDetails(user));

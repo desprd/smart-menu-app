@@ -31,4 +31,7 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_information_id", referencedColumnName = "id")
     private ProfileInformation profileInformation;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "menu_settings_id", referencedColumnName = "id")
+    private MenuSettings menuSettings;
 }
