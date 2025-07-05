@@ -2,29 +2,72 @@ import React, { useState } from "react";
 import FormInput from "../components/FormInput";
 import FormSelect from "../components/FormSelect";
 import { isBlank } from "../utils/dataCheck";
+import axios from "axios";
+import type { UpdateResponse } from "../types/update";
+import { useNavigate } from "react-router-dom";
+import { he } from "react-day-picker/locale";
 const CreateProfilePage: React.FC = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem("token");
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
   const [sex, setSex] = useState("");
   const [activity, setActivity] = useState("");
-  const [goal, setGoal] = useState("");
+  const [goals, setGoals] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const handleLogin = () => {
+  const navigate = useNavigate();
+  const handleLogin = async () => {
     if (
       isBlank(weight) ||
       isBlank(height) ||
       isBlank(age) ||
       isBlank(sex) ||
       isBlank(activity) ||
-      isBlank(goal)
+      isBlank(goals)
     ) {
       setErrorMessage("Fields are supposed to be not blank");
       return;
     }
-    alert(
-      `Logging in with: ${weight}, ${height}, ${age}, ${activity}, ${goal}`
-    );
+    if (Number(weight) < 30 || Number(weight) > 300) {
+      setErrorMessage("Please enter valid weight");
+      return;
+    }
+    if (Number(height) < 140 || Number(height) > 220) {
+      setErrorMessage("Please enter valid height");
+      return;
+    }
+    if (Number(age) < 12 || Number(age) > 150) {
+      setErrorMessage("Please enter valid age");
+      return;
+    }
+    try {
+      const response = await axios.put<UpdateResponse>(
+        `${API_URL}/information/update`,
+        {
+          weight,
+          height,
+          age,
+          sex,
+          activity,
+          goals,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        console.log(response.data.content.message);
+        navigate("/menu");
+      } else {
+        console.log(response.data.content.message);
+        setErrorMessage(response.data.errorMessage);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-white font-lexend">
@@ -58,8 +101,8 @@ const CreateProfilePage: React.FC = () => {
           options={["", "Low", "Moderate", "High"]}
         />
         <FormSelect
-          value={goal}
-          onChange={setGoal}
+          value={goals}
+          onChange={setGoals}
           label="Your goals"
           options={["", "Сut", "Maintenance", "Bulk"]}
         />

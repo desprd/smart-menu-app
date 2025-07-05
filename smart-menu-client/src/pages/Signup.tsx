@@ -41,7 +41,7 @@ const Signup: React.FC = () => {
       if (response.data.success && response.data.content.token) {
         localStorage.setItem("token", response.data.content.token);
         login(response.data.content);
-        navigate("/menu");
+        navigate("/createprofile");
       } else {
         setErrorMessage(response.data.errorMessage);
       }
