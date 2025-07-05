@@ -6,6 +6,7 @@ import com.ilyaproject.smart_menu_server.dto.SignUpRequestDTO;
 import com.ilyaproject.smart_menu_server.dto.AuthResponseDTO;
 import com.ilyaproject.smart_menu_server.dto.VerifyResponseDTO;
 import com.ilyaproject.smart_menu_server.exception.AuthException;
+import com.ilyaproject.smart_menu_server.model.ProfileInformation;
 import com.ilyaproject.smart_menu_server.model.Role;
 import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
@@ -32,12 +33,22 @@ public class AuthenticationService {
         if (repository.existsByEmail(email)){
             throw new AuthException("User with this email already exists");
         }
+        var profileInfo = ProfileInformation
+                .builder()
+                .weight(60.0)
+                .height(180.0)
+                .age(21)
+                .sex("Male")
+                .activity("Moderate")
+                .goals("Maintenance")
+                .build();
         var user = User
                 .builder()
                 .username(username)
                 .email(email)
                 .role(Role.USER)
                 .password(encoder.encode(req.getPassword()))
+                .profileInformation(profileInfo)
                 .build();
         repository.save(user);
         var token = jwtService.generateToken(new CustomUserDetails(user));
