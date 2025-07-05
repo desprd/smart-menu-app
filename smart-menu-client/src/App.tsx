@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateProfilePage from "./pages/CreateProfilePage";
+import CreateRecipesPage from "./pages/CreateRecipesPage";
 
 function App() {
   return (
@@ -26,6 +27,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateProfilePage />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/createrecipes"
+            element={
+              <ProtectedRoute>
+                <CreateRecipesPage />
               </ProtectedRoute>
             }
           ></Route>
