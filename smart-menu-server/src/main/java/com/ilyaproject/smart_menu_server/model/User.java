@@ -28,4 +28,7 @@ public class User {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_information_id", referencedColumnName = "id")
+    private ProfileInformation profileInformation;
 }
