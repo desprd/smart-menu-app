@@ -3,18 +3,47 @@ import CheckBox from "../components/CheckBox";
 import FormSelect from "../components/FormSelect";
 import FormTextarea from "../components/FormTextarea";
 import SubmitButton from "../components/SubmitButton";
+import type { UpdateResponse } from "../types/update";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreateRecipesPage: React.FC = () => {
-  const [isVegeterian, setIsVegeterian] = useState(false);
+  const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem("token");
+  const [isVegetarian, setIsVegetarian] = useState(false);
   const [isGlutenFree, setIsGlutenFree] = useState(false);
   const [isDairyFree, setIsDairyFree] = useState(false);
   const [isNutFree, setIsNutFree] = useState(false);
   const [cuisine, setCuisine] = useState("Any");
   const [excluded, setExcluded] = useState("");
   const handleSettingsChange = async () => {
-    alert(
-      `Logging in with: ${isVegeterian}, ${isGlutenFree}, ${isDairyFree}, ${isNutFree}, ${cuisine}, ${excluded}`
-    );
+    try {
+      const response = await axios.put<UpdateResponse>(
+        `${API_URL}/menu/settings/update`,
+        {
+          isVegetarian,
+          isGlutenFree,
+          isDairyFree,
+          isNutFree,
+          cuisine,
+          excluded,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        console.log(response.data.content.message);
+        navigate("/menu");
+      } else {
+        console.error(response.data.errorMessage);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div className="flex min-h-screen items-center justify-center bg-white font-lexend px-4">
@@ -33,8 +62,8 @@ const CreateRecipesPage: React.FC = () => {
         <div className="mb-4">
           <CheckBox
             label="Vegetarian"
-            checked={isVegeterian}
-            setChecked={setIsVegeterian}
+            checked={isVegetarian}
+            setChecked={setIsVegetarian}
           />
           <CheckBox
             label="Gluten-Free"

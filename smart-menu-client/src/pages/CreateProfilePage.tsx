@@ -5,7 +5,6 @@ import { isBlank } from "../utils/dataCheck";
 import axios from "axios";
 import type { UpdateResponse } from "../types/update";
 import { useNavigate } from "react-router-dom";
-import { he } from "react-day-picker/locale";
 const CreateProfilePage: React.FC = () => {
   const API_URL = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem("token");
@@ -60,7 +59,7 @@ const CreateProfilePage: React.FC = () => {
       );
       if (response.data.success) {
         console.log(response.data.content.message);
-        navigate("/menu");
+        navigate("/createrecipes");
       } else {
         console.log(response.data.content.message);
         setErrorMessage(response.data.errorMessage);
