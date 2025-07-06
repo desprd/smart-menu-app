@@ -3,7 +3,7 @@ package com.ilyaproject.smart_menu_server.ai;
 import com.ilyaproject.smart_menu_server.exception.GenerationException;
 import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.utils.UserUtils;
-import com.ilyaproject.smart_menu_server.wraper.Recipes;
+import com.ilyaproject.smart_menu_server.dto.RecipesDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -20,11 +20,11 @@ public class MenuGenerator {
     private final PromptGenerator generator;
     private final UserUtils utils;
 
-    public Recipes generate(Authentication authentication) throws Exception{
+    public RecipesDTO generate(Authentication authentication) throws Exception{
         try {
             User user = utils.getUserByAuthentication(authentication);
             String json = MenuRequestJsonProvider.json;
-            var outputConverter = new BeanOutputConverter<>(Recipes.class);
+            var outputConverter = new BeanOutputConverter<>(RecipesDTO.class);
             Prompt prompt = generator.promptProvider(user, json);
             String response =  model.call(prompt).getResult().getOutput().getText();
             return outputConverter.convert(response);
