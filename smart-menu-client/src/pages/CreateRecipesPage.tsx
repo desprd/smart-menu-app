@@ -6,6 +6,7 @@ import SubmitButton from "../components/SubmitButton";
 import type { UpdateResponse } from "../types/update";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getInitMenu } from "../utils/CreateInitMenu";
 
 const CreateRecipesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,8 +18,10 @@ const CreateRecipesPage: React.FC = () => {
   const [isNutFree, setIsNutFree] = useState(false);
   const [cuisine, setCuisine] = useState("Any");
   const [excluded, setExcluded] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const handleSettingsChange = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.put<UpdateResponse>(
         `${API_URL}/menu/settings/update`,
         {
@@ -37,14 +40,31 @@ const CreateRecipesPage: React.FC = () => {
       );
       if (response.data.success) {
         console.log(response.data.content.message);
-        navigate("/menu");
+        if (token != null) {
+          await getInitMenu(API_URL, token);
+        }
       } else {
         console.error(response.data.errorMessage);
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
+      navigate("/menu");
     }
   };
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-white font-lexend">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-[#648772] border-opacity-50 mb-4 mx-auto"></div>
+          <p className="text-[#648772] text-lg font-medium">
+            Creating your menu...
+          </p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex min-h-screen items-center justify-center bg-white font-lexend px-4">
       <div className="w-full max-w-xl p-6 rounded-2xl bg-white">

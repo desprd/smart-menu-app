@@ -3,6 +3,7 @@ package com.ilyaproject.smart_menu_server.controller;
 import com.ilyaproject.smart_menu_server.ai.MenuGenerator;
 import com.ilyaproject.smart_menu_server.dto.GeneralResponse;
 import com.ilyaproject.smart_menu_server.dto.RecipesDTO;
+import com.ilyaproject.smart_menu_server.dto.UpdateResponseDTO;
 import com.ilyaproject.smart_menu_server.model.Recipes;
 import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.service.MenuService;
@@ -27,11 +28,12 @@ public class MenuController {
     @GetMapping("/init")
     public ResponseEntity<?> initialMenuGeneration(Authentication authentication){
         try {
-            RecipesDTO recipes = service.initialMenuGeneration(authentication);
-            GeneralResponse<RecipesDTO> response = new GeneralResponse<>(true, recipes);
+            service.initialMenuGeneration(authentication);
+            UpdateResponseDTO update = new UpdateResponseDTO("Menu instance was created successfully");
+            GeneralResponse<UpdateResponseDTO> response = new GeneralResponse<>(true, update);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
-            GeneralResponse<RecipesDTO> response = new GeneralResponse<>(false, e.getMessage());
+            GeneralResponse<UpdateResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }

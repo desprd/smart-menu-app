@@ -24,14 +24,13 @@ public class MenuService {
     private final MenuGenerator generator;
     private final DTOToEntity dte;
     @Transactional
-    public RecipesDTO initialMenuGeneration(Authentication authentication) throws Exception{
+    public void initialMenuGeneration(Authentication authentication) throws Exception{
         try {
             User user = utils.getUserByAuthentication(authentication);
             RecipesDTO recipesdto = generator.generate(user).get();
             Recipes recipes = dte.mapRecipesDTOToEntity(recipesdto);
             user.setRecipes(recipes);
             repository.save(user);
-            return recipesdto;
         }catch (Exception e){
             log.error("Failed to generate menu", e);
             throw new GenerationException("Failed to generate menu", e);
