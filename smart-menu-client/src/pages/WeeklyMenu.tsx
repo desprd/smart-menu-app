@@ -33,31 +33,14 @@ const WeeklyMenu: React.FC = () => {
       setIsLoading(false);
     }
   };
-  const mealss = [
-    {
-      day: "Monday",
-      meals: [
-        {
-          id: 12,
-          title: "Breakfast: Oatmeal with Berries",
-          calories: "350 calories",
-        },
-        {
-          id: 12,
-          title: "Lunch: Chicken Salad Sandwich",
-          calories: "500 calories",
-        },
-        {
-          id: 12,
-          title: "Dinner: Salmon with Roasted Vegetables",
-          calories: "650 calories",
-        },
-      ],
-    },
-  ];
+
   useEffect(() => {
     fetchMealsData();
   }, []);
+
+  useEffect(() => {
+    console.log(meals);
+  }, [meals]);
 
   if (isLoading) {
     return (
@@ -80,10 +63,13 @@ const WeeklyMenu: React.FC = () => {
               </h2>
             </div>
             <Calendar />
-
-            {mealss.map((dayBlock, i) => (
-              <MealSection key={i} day={dayBlock.day} meals={dayBlock.meals} />
-            ))}
+            <MealSection day={"Monday"} meals={meals.slice(0, 3)} />
+            <MealSection day={"Tuesday"} meals={meals.slice(3, 6)} />
+            <MealSection day={"Wednesday"} meals={meals.slice(6, 9)} />
+            <MealSection day={"Thursday"} meals={meals.slice(9, 12)} />
+            <MealSection day={"Friday"} meals={meals.slice(12, 15)} />
+            <MealSection day={"Saturday"} meals={meals.slice(15, 18)} />
+            <MealSection day={"Sunday"} meals={meals.slice(18, 21)} />
           </main>
         </div>
       </div>
