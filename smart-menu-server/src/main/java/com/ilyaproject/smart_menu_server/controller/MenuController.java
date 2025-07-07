@@ -37,4 +37,16 @@ public class MenuController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/get")
+    public ResponseEntity<?> getUserMenu(Authentication authentication){
+        try {
+            RecipesDTO recipes = service.getUserRecipes(authentication);
+            GeneralResponse<RecipesDTO> response = new GeneralResponse<>(true, recipes);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            GeneralResponse<UpdateResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
