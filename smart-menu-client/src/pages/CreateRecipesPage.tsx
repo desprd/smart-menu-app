@@ -7,6 +7,7 @@ import type { UpdateResponse } from "../types/update";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getInitMenu } from "../utils/CreateInitMenu";
+import Loading from "./Loading";
 
 const CreateRecipesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -55,13 +56,8 @@ const CreateRecipesPage: React.FC = () => {
   };
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white font-lexend">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-[#648772] border-opacity-50 mb-4 mx-auto"></div>
-          <p className="text-[#648772] text-lg font-medium">
-            Creating your menu...
-          </p>
-        </div>
+      <div>
+        <Loading loadingtext="Create your personal menu..." />
       </div>
     );
   }

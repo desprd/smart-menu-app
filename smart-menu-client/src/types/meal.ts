@@ -1,4 +1,5 @@
 export type Meal = {
+  id: number;
   title: string;
   calories: string;
 };
@@ -6,4 +7,14 @@ export type Meal = {
 export type DayPlan = {
   day: string;
   meals: Meal[];
+};
+
+export type MealServerResponse = {
+  success: boolean;
+  content: MealInformation;
+  errorMessage: string | null;
+};
+
+export type MealInformation = {
+  mealsShortInformation: Meal[];
 };
