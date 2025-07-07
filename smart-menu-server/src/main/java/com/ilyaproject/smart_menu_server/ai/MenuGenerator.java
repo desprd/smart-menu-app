@@ -9,8 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -20,14 +23,15 @@ public class MenuGenerator {
     private final PromptGenerator generator;
     private final UserUtils utils;
 
-    public RecipesDTO generate(Authentication authentication) throws Exception{
+    @Async("taskExecutor")
+    public CompletableFuture<RecipesDTO> generate(User user) throws Exception{
         try {
-            User user = utils.getUserByAuthentication(authentication);
             String json = MenuRequestJsonProvider.json;
             var outputConverter = new BeanOutputConverter<>(RecipesDTO.class);
             Prompt prompt = generator.promptProvider(user, json);
             String response =  model.call(prompt).getResult().getOutput().getText();
-            return outputConverter.convert(response);
+            RecipesDTO result = outputConverter.convert(response);
+            return CompletableFuture.completedFuture(result);
         }catch (Exception e){
             log.error("Failed to generate menu for user ", e);
             throw new GenerationException("Failed to generate menu for user ", e);
