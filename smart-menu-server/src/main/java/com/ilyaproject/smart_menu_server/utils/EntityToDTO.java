@@ -1,6 +1,6 @@
 package com.ilyaproject.smart_menu_server.utils;
 
-import com.ilyaproject.smart_menu_server.dto.*;
+import com.ilyaproject.smart_menu_server.dto.menu.json.*;
 import com.ilyaproject.smart_menu_server.model.*;
 import org.springframework.stereotype.Service;
 

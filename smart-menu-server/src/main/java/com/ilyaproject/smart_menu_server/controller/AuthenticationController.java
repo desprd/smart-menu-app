@@ -1,6 +1,10 @@
 package com.ilyaproject.smart_menu_server.controller;
 
-import com.ilyaproject.smart_menu_server.dto.*;
+import com.ilyaproject.smart_menu_server.dto.auth.AuthResponseDTO;
+import com.ilyaproject.smart_menu_server.dto.auth.LoginRequestDTO;
+import com.ilyaproject.smart_menu_server.dto.auth.SignUpRequestDTO;
+import com.ilyaproject.smart_menu_server.dto.general.GeneralResponse;
+import com.ilyaproject.smart_menu_server.dto.general.VerifyResponseDTO;
 import com.ilyaproject.smart_menu_server.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

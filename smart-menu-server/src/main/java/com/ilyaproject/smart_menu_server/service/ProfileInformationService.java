@@ -1,10 +1,8 @@
 package com.ilyaproject.smart_menu_server.service;
 
 import com.ilyaproject.smart_menu_server.config.details.CustomUserDetails;
-import com.ilyaproject.smart_menu_server.dto.ProfileInformationRequestDTO;
-import com.ilyaproject.smart_menu_server.exception.AuthException;
+import com.ilyaproject.smart_menu_server.dto.profile.ProfileInformationRequestDTO;
 import com.ilyaproject.smart_menu_server.exception.ProfileException;
-import com.ilyaproject.smart_menu_server.repository.ProfileInformationRepository;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

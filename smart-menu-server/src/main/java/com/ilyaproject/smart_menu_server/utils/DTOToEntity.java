@@ -1,9 +1,9 @@
 package com.ilyaproject.smart_menu_server.utils;
 
-import com.ilyaproject.smart_menu_server.dto.DailyDTO;
-import com.ilyaproject.smart_menu_server.dto.MealDTO;
-import com.ilyaproject.smart_menu_server.dto.MenuDTO;
-import com.ilyaproject.smart_menu_server.dto.RecipesDTO;
+import com.ilyaproject.smart_menu_server.dto.menu.json.DailyDTO;
+import com.ilyaproject.smart_menu_server.dto.menu.json.MealDTO;
+import com.ilyaproject.smart_menu_server.dto.menu.json.MenuDTO;
+import com.ilyaproject.smart_menu_server.dto.menu.json.RecipesDTO;
 import com.ilyaproject.smart_menu_server.model.*;
 import org.springframework.stereotype.Service;
 

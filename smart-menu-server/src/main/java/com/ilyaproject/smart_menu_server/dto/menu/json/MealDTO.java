@@ -1,4 +1,4 @@
-package com.ilyaproject.smart_menu_server.dto;
+package com.ilyaproject.smart_menu_server.dto.menu.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

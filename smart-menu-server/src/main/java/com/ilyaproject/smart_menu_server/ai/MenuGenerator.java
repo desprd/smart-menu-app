@@ -3,14 +3,13 @@ package com.ilyaproject.smart_menu_server.ai;
 import com.ilyaproject.smart_menu_server.exception.GenerationException;
 import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.utils.UserUtils;
-import com.ilyaproject.smart_menu_server.dto.RecipesDTO;
+import com.ilyaproject.smart_menu_server.dto.menu.json.RecipesDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;

@@ -1,9 +1,7 @@
 package com.ilyaproject.smart_menu_server.service;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.ilyaproject.smart_menu_server.config.details.CustomUserDetails;
-import com.ilyaproject.smart_menu_server.dto.MenuSettingsRequestDTO;
-import com.ilyaproject.smart_menu_server.dto.ProfileInformationRequestDTO;
+import com.ilyaproject.smart_menu_server.dto.profile.MenuSettingsRequestDTO;
 import com.ilyaproject.smart_menu_server.exception.ProfileException;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
 import jakarta.validation.Valid;

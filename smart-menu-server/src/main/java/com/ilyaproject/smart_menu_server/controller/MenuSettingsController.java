@@ -1,8 +1,8 @@
 package com.ilyaproject.smart_menu_server.controller;
 
-import com.ilyaproject.smart_menu_server.dto.GeneralResponse;
-import com.ilyaproject.smart_menu_server.dto.MenuSettingsRequestDTO;
-import com.ilyaproject.smart_menu_server.dto.UpdateResponseDTO;
+import com.ilyaproject.smart_menu_server.dto.general.GeneralResponse;
+import com.ilyaproject.smart_menu_server.dto.profile.MenuSettingsRequestDTO;
+import com.ilyaproject.smart_menu_server.dto.general.UpdateResponseDTO;
 import com.ilyaproject.smart_menu_server.service.MenuSettingsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
-package com.ilyaproject.smart_menu_server.dto;
+package com.ilyaproject.smart_menu_server.dto.menu.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ilyaproject.smart_menu_server.model.Meal;
+import com.ilyaproject.smart_menu_server.dto.menu.json.MenuDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DailyDTO {
-    @JsonProperty("meals")
-    private List<MealDTO> meals;
+public class RecipesDTO {
+    @JsonProperty("menu")
+    private List<MenuDTO> menu;
 }

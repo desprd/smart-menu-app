@@ -1,15 +1,14 @@
 package com.ilyaproject.smart_menu_server.controller;
 
-import com.ilyaproject.smart_menu_server.dto.GeneralResponse;
-import com.ilyaproject.smart_menu_server.dto.ProfileInformationRequestDTO;
-import com.ilyaproject.smart_menu_server.dto.UpdateResponseDTO;
+import com.ilyaproject.smart_menu_server.dto.general.GeneralResponse;
+import com.ilyaproject.smart_menu_server.dto.profile.ProfileInformationRequestDTO;
+import com.ilyaproject.smart_menu_server.dto.general.UpdateResponseDTO;
 import com.ilyaproject.smart_menu_server.service.ProfileInformationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

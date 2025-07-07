@@ -1,4 +1,4 @@
-package com.ilyaproject.smart_menu_server.dto;
+package com.ilyaproject.smart_menu_server.dto.profile;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

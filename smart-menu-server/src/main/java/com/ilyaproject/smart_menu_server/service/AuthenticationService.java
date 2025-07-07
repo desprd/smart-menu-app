@@ -1,10 +1,10 @@
 package com.ilyaproject.smart_menu_server.service;
 
 import com.ilyaproject.smart_menu_server.config.details.CustomUserDetails;
-import com.ilyaproject.smart_menu_server.dto.LoginRequestDTO;
-import com.ilyaproject.smart_menu_server.dto.SignUpRequestDTO;
-import com.ilyaproject.smart_menu_server.dto.AuthResponseDTO;
-import com.ilyaproject.smart_menu_server.dto.VerifyResponseDTO;
+import com.ilyaproject.smart_menu_server.dto.auth.LoginRequestDTO;
+import com.ilyaproject.smart_menu_server.dto.auth.SignUpRequestDTO;
+import com.ilyaproject.smart_menu_server.dto.auth.AuthResponseDTO;
+import com.ilyaproject.smart_menu_server.dto.general.VerifyResponseDTO;
 import com.ilyaproject.smart_menu_server.exception.AuthException;
 import com.ilyaproject.smart_menu_server.model.MenuSettings;
 import com.ilyaproject.smart_menu_server.model.ProfileInformation;

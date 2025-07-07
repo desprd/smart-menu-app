@@ -1,4 +1,4 @@
-package com.ilyaproject.smart_menu_server.dto;
+package com.ilyaproject.smart_menu_server.dto.general;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
