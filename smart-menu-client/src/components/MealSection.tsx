@@ -8,7 +8,7 @@ const MealSection: React.FC<DayPlan> = ({ day, meals }) => {
       <h3 className="text-[#111714] text-xl font-bold mb-3">{day}</h3>
       <div className="space-y-3">
         {meals.map((meal) => (
-          <MealCard meal={meal} key={meal.id} />
+          <MealCard meal={meal} key={meal.id} id={meal.id} />
         ))}
       </div>
     </section>

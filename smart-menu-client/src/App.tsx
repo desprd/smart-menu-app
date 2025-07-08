@@ -48,7 +48,7 @@ function App() {
             }
           ></Route>
           <Route
-            path="/recipe"
+            path="/recipe/:id"
             element={
               <ProtectedRoute>
                 <Recipe />

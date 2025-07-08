@@ -17,18 +17,18 @@ const Signup: React.FC = () => {
   const { login } = useAuth();
 
   const handleSignup = async () => {
-    // if (password.length < 6) {
-    //   setErrorMessage("Password supposed to be at least 6 characters long");
-    //   return;
-    // }
-    // if (password != confirmPassword) {
-    //   setErrorMessage("Failed to confirm password");
-    //   return;
-    // }
-    // if (!email.includes("@") || !email.includes(".")) {
-    //   setErrorMessage("Please enter a valid email address");
-    //   return;
-    // }
+    if (password.length < 6) {
+      setErrorMessage("Password supposed to be at least 6 characters long");
+      return;
+    }
+    if (password != confirmPassword) {
+      setErrorMessage("Failed to confirm password");
+      return;
+    }
+    if (!email.includes("@") || !email.includes(".")) {
+      setErrorMessage("Please enter a valid email address");
+      return;
+    }
     try {
       const response = await axios.post<AuthServerResponse>(
         `${API_URL}/auth/signup`,

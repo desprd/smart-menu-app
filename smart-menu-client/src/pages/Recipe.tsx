@@ -1,12 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const Recipe: React.FC = () => {
+  const { id } = useParams();
   return (
-    <div
-      className="relative flex min-h-screen flex-col bg-white overflow-x-hidden"
-      style={{ fontFamily: 'Lexend, "Noto Sans", sans-serif' }}
-    >
+    <div className="relative flex min-h-screen flex-col bg-white overflow-x-hidden font-lexend">
       <main className="px-10 py-5 flex justify-center">
         <div className="max-w-[960px] w-full">
           <div className="flex gap-2 p-4 text-[#648772] text-base font-medium">
@@ -26,8 +24,7 @@ const Recipe: React.FC = () => {
             <div
               className="w-full xl:w-1/2 min-h-[300px] bg-cover bg-center rounded-xl"
               style={{
-                backgroundImage:
-                  'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBIra80O-rPmFu2CODJGj3k1rneBlh9PoBbTKa3BI7oISxz8uX4d8WzpzH_40OIgNzcrV7LUxlk_WGbeHjbDMLeOBoGFN6ShfCEklHzuKTzH5-WSaKlspZBeDzy5aQIIQoxGL3jL04Uc_JSOC02CEZZG3K1RpRDbbAs0guxrneochbx3Gebrm3tVuIKboFMYIMmk41tjWjIdovKShOXSgLiOvKygy5E4bydO2CELSkgS-iEVfrAT2vCSoMVqTwh3xdUO7cCOlSCZyM")',
+                backgroundImage: `url(${"/food.png"})`,
               }}
             ></div>
           </div>
