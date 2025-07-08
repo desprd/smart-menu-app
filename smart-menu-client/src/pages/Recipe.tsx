@@ -1,8 +1,52 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import type {
+  FullRecipeInformation,
+  RecipeInformationResponse,
+} from "../types/meal";
+import Loading from "./Loading";
 
 const Recipe: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
+  const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem("token");
+  const [recipeInfo, setRecipeInfo] = useState<FullRecipeInformation>();
+  const fetchRecipeData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get<RecipeInformationResponse>(
+        `${API_URL}/menu/generate/get/recipe/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setRecipeInfo(response.data.content);
+      } else {
+        console.error(response.data.errorMessage);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchRecipeData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div>
+        <Loading loadingtext="Loading your menu..." />
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex min-h-screen flex-col bg-white overflow-x-hidden font-lexend">
       <main className="px-10 py-5 flex justify-center">
@@ -10,12 +54,12 @@ const Recipe: React.FC = () => {
           <div className="flex gap-2 p-4 text-[#648772] text-base font-medium">
             <Link to={"/menu"}>Menu</Link>
             <span>/</span>
-            <span className="text-[#111714]">Mediterranean Quinoa Salad</span>
+            <span className="text-[#111714]">{recipeInfo?.name}</span>
           </div>
 
           <div className="p-4">
             <h1 className="text-[32px] font-bold text-[#111714] leading-tight mb-2">
-              Mediterranean Quinoa Salad
+              {recipeInfo?.name}
             </h1>
           </div>
 
@@ -33,26 +77,11 @@ const Recipe: React.FC = () => {
             <h2 className="text-[22px] font-bold text-[#111714] mb-4">
               Ingredients
             </h2>
-            <ul className="grid grid-cols-[20%_1fr] gap-x-6">
-              {[
-                ["Quinoa", "1 cup"],
-                ["Cucumber", "1 cup, diced"],
-                ["Tomatoes", "1 cup, diced"],
-                ["Red Onion", "1/2 cup, finely chopped"],
-                ["Kalamata Olives", "1/2 cup, pitted and halved"],
-                ["Feta Cheese", "1/2 cup, crumbled"],
-                ["Fresh Parsley", "1/4 cup, chopped"],
-                ["Lemon Juice", "2 tablespoons"],
-                ["Olive Oil", "2 tablespoons"],
-                ["Salt", "1/2 teaspoon"],
-                ["Pepper", "1/4 teaspoon"],
-              ].map(([name, quantity]) => (
-                <React.Fragment key={name}>
+            <ul className="flex flex-col gap-x-6">
+              {recipeInfo?.ingredients.map((ingredient) => (
+                <React.Fragment>
                   <li className="border-t border-[#dce5df] py-3 text-sm text-[#648772]">
-                    {name}
-                  </li>
-                  <li className="border-t border-[#dce5df] py-3 text-sm text-[#111714]">
-                    {quantity}
+                    {ingredient}
                   </li>
                 </React.Fragment>
               ))}
@@ -63,21 +92,7 @@ const Recipe: React.FC = () => {
             <h2 className="text-[22px] font-bold text-[#111714] mb-4">
               Instructions
             </h2>
-            <p className="text-base text-[#111714]">
-              1. Rinse quinoa thoroughly under cold water. 2. In a medium
-              saucepan, combine quinoa with 2 cups of water or vegetable broth.
-              Bring to a boil, then reduce heat and simmer for 15 minutes, or
-              until quinoa is cooked and water is absorbed. Fluff with a fork
-              and let cool. 3. While quinoa is cooking, prepare the vegetables.
-              Dice the cucumber and tomatoes, finely chop the red onion, and
-              halve the Kalamata olives. 4. In a large bowl, combine the cooked
-              quinoa, cucumber, tomatoes, red onion, Kalamata olives, and
-              crumbled feta cheese. 5. In a small bowl, whisk together the lemon
-              juice, olive oil, salt, and pepper to make the dressing. 6. Pour
-              the dressing over the quinoa and vegetables. Toss gently to
-              combine. 7. Garnish with fresh parsley. Serve immediately or chill
-              for later.
-            </p>
+            <p className="text-base text-[#111714]">{recipeInfo?.recipeText}</p>
           </section>
 
           <section className="p-4">
@@ -85,21 +100,32 @@ const Recipe: React.FC = () => {
               Nutritional Information
             </h2>
             <ul className="grid grid-cols-[20%_1fr] gap-x-6">
-              {[
-                ["Calories", "350 kcal"],
-                ["Protein", "12g"],
-                ["Fat", "18g"],
-                ["Carbohydrates", "35g"],
-              ].map(([name, value]) => (
-                <React.Fragment key={name}>
-                  <li className="border-t border-[#dce5df] py-3 text-sm text-[#648772]">
-                    {name}
-                  </li>
-                  <li className="border-t border-[#dce5df] py-3 text-sm text-[#111714]">
-                    {value}
-                  </li>
-                </React.Fragment>
-              ))}
+              <React.Fragment>
+                <li className="border-t border-[#dce5df] py-3 text-sm text-[#648772]">
+                  Calories
+                </li>
+                <li className="border-t border-[#dce5df] py-3 text-sm text-[#111714]">
+                  {recipeInfo?.calories}
+                </li>
+                <li className="border-t border-[#dce5df] py-3 text-sm text-[#648772]">
+                  Protein
+                </li>
+                <li className="border-t border-[#dce5df] py-3 text-sm text-[#111714]">
+                  {recipeInfo?.proteins}
+                </li>
+                <li className="border-t border-[#dce5df] py-3 text-sm text-[#648772]">
+                  Fat
+                </li>
+                <li className="border-t border-[#dce5df] py-3 text-sm text-[#111714]">
+                  {recipeInfo?.fats}
+                </li>
+                <li className="border-t border-[#dce5df] py-3 text-sm text-[#648772]">
+                  Carbohydrates
+                </li>
+                <li className="border-t border-[#dce5df] py-3 text-sm text-[#111714]">
+                  {recipeInfo?.carbohydrates}
+                </li>
+              </React.Fragment>
             </ul>
           </section>
         </div>

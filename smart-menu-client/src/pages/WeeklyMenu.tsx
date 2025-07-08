@@ -38,10 +38,6 @@ const WeeklyMenu: React.FC = () => {
     fetchMealsData();
   }, []);
 
-  useEffect(() => {
-    console.log(meals);
-  }, [meals]);
-
   if (isLoading) {
     return (
       <div>

@@ -18,3 +18,19 @@ export type MealServerResponse = {
 export type MealInformation = {
   mealsShortInformation: Meal[];
 };
+
+export type RecipeInformationResponse = {
+  success: boolean;
+  content: FullRecipeInformation;
+  errorMessage: string | null;
+};
+
+export type FullRecipeInformation = {
+  name: string;
+  recipeText: string;
+  ingredients: string[];
+  calories: string;
+  proteins: string;
+  fats: string;
+  carbohydrates: string;
+};
