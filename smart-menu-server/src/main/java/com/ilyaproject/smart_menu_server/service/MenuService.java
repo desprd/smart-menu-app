@@ -14,6 +14,7 @@ import com.ilyaproject.smart_menu_server.utils.EntityToDTO;
 import com.ilyaproject.smart_menu_server.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,7 @@ public class MenuService {
         }
     }
 
+    @Cacheable(value = "meals", key = "#authentication.name")
     public MenuPageDTO getInformationForMenuPage(Authentication authentication) throws Exception{
         try {
             User user = utils.getUserByAuthentication(authentication);
