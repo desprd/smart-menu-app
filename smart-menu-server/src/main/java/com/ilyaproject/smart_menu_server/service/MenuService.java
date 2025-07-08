@@ -2,12 +2,15 @@ package com.ilyaproject.smart_menu_server.service;
 
 import com.ilyaproject.smart_menu_server.ai.MenuGenerator;
 import com.ilyaproject.smart_menu_server.dto.menu.json.RecipesDTO;
+import com.ilyaproject.smart_menu_server.dto.menu.request.MealFullInformationDTO;
 import com.ilyaproject.smart_menu_server.dto.menu.request.MealShortInformationDTO;
 import com.ilyaproject.smart_menu_server.dto.menu.request.MenuPageDTO;
 import com.ilyaproject.smart_menu_server.exception.GenerationException;
 import com.ilyaproject.smart_menu_server.exception.MenuException;
+import com.ilyaproject.smart_menu_server.model.Meal;
 import com.ilyaproject.smart_menu_server.model.Recipes;
 import com.ilyaproject.smart_menu_server.model.User;
+import com.ilyaproject.smart_menu_server.repository.MealRepository;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
 import com.ilyaproject.smart_menu_server.utils.DTOToEntity;
 import com.ilyaproject.smart_menu_server.utils.EntityToDTO;
@@ -31,6 +34,7 @@ public class MenuService {
     private final MenuGenerator generator;
     private final DTOToEntity dte;
     private final EntityToDTO etd;
+    private final MealRepository mealRepository;
     @Transactional
     public void initialMenuGeneration(Authentication authentication) throws Exception{
         try {
@@ -72,6 +76,26 @@ public class MenuService {
         }catch (Exception e){
             log.error("Failed to get short meal information ", e);
             throw new MenuException("Failed to get short meal information ", e);
+        }
+    }
+
+    @Cacheable("recipes")
+    public MealFullInformationDTO getFullRecipeById(int recipeId) throws Exception{
+        Meal meal = mealRepository.findById(recipeId).orElseThrow(() -> new MenuException("Meal with that id was not found"));
+        try {
+            return MealFullInformationDTO
+                    .builder()
+                    .name(meal.getName())
+                    .ingredients(meal.getIngredients())
+                    .recipeText(meal.getRecipeText())
+                    .fats(meal.getNutritionalInformation().getFats())
+                    .calories(meal.getNutritionalInformation().getCalories())
+                    .carbohydrates(meal.getNutritionalInformation().getCarbohydrates())
+                    .proteins(meal.getNutritionalInformation().getProteins())
+                    .build();
+        }catch (Exception e){
+            log.error("Failed to create MealFullInformation ", e);
+            throw new MenuException("Failed to create MealFullInformation ", e);
         }
     }
 }

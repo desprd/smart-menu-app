@@ -3,6 +3,7 @@ package com.ilyaproject.smart_menu_server.controller;
 import com.ilyaproject.smart_menu_server.dto.general.GeneralResponse;
 import com.ilyaproject.smart_menu_server.dto.menu.json.RecipesDTO;
 import com.ilyaproject.smart_menu_server.dto.general.UpdateResponseDTO;
+import com.ilyaproject.smart_menu_server.dto.menu.request.MealFullInformationDTO;
 import com.ilyaproject.smart_menu_server.dto.menu.request.MenuPageDTO;
 import com.ilyaproject.smart_menu_server.service.MenuService;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -52,6 +50,18 @@ public class MenuController {
         try {
             MenuPageDTO menuPage = service.getInformationForMenuPage(authentication);
             GeneralResponse<MenuPageDTO> response = new GeneralResponse<>(true, menuPage);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            GeneralResponse<UpdateResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get/recipe/{id}")
+    public ResponseEntity<?> getFullRecipeById(@PathVariable int id){
+        try {
+            MealFullInformationDTO information = service.getFullRecipeById(id);
+            GeneralResponse<MealFullInformationDTO> response = new GeneralResponse<>(true, information);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             GeneralResponse<UpdateResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
