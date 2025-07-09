@@ -3,6 +3,7 @@ package com.ilyaproject.smart_menu_server.service;
 import com.ilyaproject.smart_menu_server.dto.credentials.ChangeCredentialsDTO;
 import com.ilyaproject.smart_menu_server.email.sender.PasswordResetTokenEmailSender;
 import com.ilyaproject.smart_menu_server.exception.AuthException;
+import com.ilyaproject.smart_menu_server.exception.ResetPasswordTokenException;
 import com.ilyaproject.smart_menu_server.model.PasswordResetToken;
 import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.repository.PasswordResetTokenRepository;
@@ -44,10 +45,9 @@ public class CredentialsService {
     }
 
     public void sendLinkToChangePassword(String email) throws Exception{
-        System.out.println("EMAIL BEFORE SEARCH: [" + email + "]");
-        System.out.println("TRIMMED LOWER: [" + email.trim().toLowerCase() + "]");
         User user = repository.findByEmail(email).orElseThrow(() -> new AuthException("Failed to find user by email"));
         try {
+            deleteTokenIfExists(user.getId());
             PasswordResetToken resetToken = createPasswordResetToken(user);
             tokenRepository.save(resetToken);
             String url = urlGenerator(resetToken.getToken());
@@ -57,6 +57,21 @@ public class CredentialsService {
             throw new CredentialException("Failed to send link with reset password token " + e);
         }
 
+    }
+
+    public void validateToken(String token) throws Exception{
+        PasswordResetToken resetToken = tokenRepository.findByToken(token).orElseThrow(() -> new ResetPasswordTokenException("Failed to fined token "));
+        if (resetToken == null){
+            throw new ResetPasswordTokenException("Token object is empty");
+        }
+        if (isTokenExpired(resetToken)){
+            throw new ResetPasswordTokenException("Token is expired");
+        }
+    }
+
+    private Boolean isTokenExpired(PasswordResetToken resetToken){
+        Calendar cal = Calendar.getInstance();
+        return resetToken.getExpiryDate().before(cal.getTime());
     }
     private PasswordResetToken createPasswordResetToken(User user){
         String token = UUID.randomUUID().toString();
@@ -69,5 +84,15 @@ public class CredentialsService {
     }
     private String urlGenerator(String token){
         return path + "resetpassword?token="+token;
+    }
+    private void deleteTokenIfExists(Integer id) throws Exception{
+        try {
+            PasswordResetToken resetToken = tokenRepository.findByUserId(id);
+            if (resetToken != null){
+                tokenRepository.delete(resetToken);
+            }
+        }catch (Exception e){
+            throw new ResetPasswordTokenException("Failed to delete existing token ", e);
+        }
     }
 }

@@ -24,7 +24,7 @@ public class SecurityConfiguration  {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/**", "/api/credentials/sendlink")
+                        .requestMatchers("/api/auth/**", "/api/credentials/sendlink", "/api/credentials/validatetoken")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
