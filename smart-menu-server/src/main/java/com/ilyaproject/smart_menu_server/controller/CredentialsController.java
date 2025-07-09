@@ -1,7 +1,9 @@
 package com.ilyaproject.smart_menu_server.controller;
 
 import com.ilyaproject.smart_menu_server.dto.credentials.ChangeCredentialsDTO;
+import com.ilyaproject.smart_menu_server.dto.email.EmailDTO;
 import com.ilyaproject.smart_menu_server.dto.general.GeneralResponse;
+import com.ilyaproject.smart_menu_server.dto.general.SendLinkResponseDTO;
 import com.ilyaproject.smart_menu_server.dto.general.UpdateResponseDTO;
 import com.ilyaproject.smart_menu_server.service.CredentialsService;
 import jakarta.validation.Valid;
@@ -19,7 +21,7 @@ public class CredentialsController {
     private final CredentialsService service;
     @PutMapping("/change")
     public ResponseEntity<?> changeCredentials(@RequestBody @Valid ChangeCredentialsDTO req,
-                                               Authentication authentication) throws Exception{
+                                               Authentication authentication){
         try {
             service.changeCredentials(req, authentication);
             UpdateResponseDTO update = new UpdateResponseDTO("Users credentials were changed successfully");
@@ -30,4 +32,18 @@ public class CredentialsController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/sendlink")
+    public ResponseEntity<?> sendLinkToChangePassword(@RequestBody EmailDTO req){
+        try {
+            service.sendLinkToChangePassword(req.getEmail());
+            SendLinkResponseDTO send = new SendLinkResponseDTO("Link to change password was sent ");
+            GeneralResponse<SendLinkResponseDTO> response = new GeneralResponse<>(true, send);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            GeneralResponse<SendLinkResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

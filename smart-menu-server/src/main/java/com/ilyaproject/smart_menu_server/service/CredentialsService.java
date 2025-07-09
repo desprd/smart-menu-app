@@ -1,16 +1,24 @@
 package com.ilyaproject.smart_menu_server.service;
 
 import com.ilyaproject.smart_menu_server.dto.credentials.ChangeCredentialsDTO;
+import com.ilyaproject.smart_menu_server.email.sender.PasswordResetTokenEmailSender;
+import com.ilyaproject.smart_menu_server.exception.AuthException;
+import com.ilyaproject.smart_menu_server.model.PasswordResetToken;
 import com.ilyaproject.smart_menu_server.model.User;
+import com.ilyaproject.smart_menu_server.repository.PasswordResetTokenRepository;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
 import com.ilyaproject.smart_menu_server.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.security.auth.login.CredentialException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -19,6 +27,10 @@ public class CredentialsService {
     private final UserUtils utils;
     private final UserRepository repository;
     private final PasswordEncoder encoder;
+    private final PasswordResetTokenRepository tokenRepository;
+    private final PasswordResetTokenEmailSender sender;
+    @Value("${url.path}")
+    private String path;
     public void changeCredentials(ChangeCredentialsDTO req, Authentication authentication) throws Exception{
         User user = utils.getUserByAuthentication(authentication);
         try {
@@ -29,5 +41,33 @@ public class CredentialsService {
             log.error("Failed to change users credentials ", e);
             throw new CredentialException("Failed to change users credentials ");
         }
+    }
+
+    public void sendLinkToChangePassword(String email) throws Exception{
+        System.out.println("EMAIL BEFORE SEARCH: [" + email + "]");
+        System.out.println("TRIMMED LOWER: [" + email.trim().toLowerCase() + "]");
+        User user = repository.findByEmail(email).orElseThrow(() -> new AuthException("Failed to find user by email"));
+        try {
+            PasswordResetToken resetToken = createPasswordResetToken(user);
+            tokenRepository.save(resetToken);
+            String url = urlGenerator(resetToken.getToken());
+            sender.sendPasswordResetTokenEmail(url, email);
+        }catch (Exception e){
+            log.error("Failed to send link with reset password token " + e);
+            throw new CredentialException("Failed to send link with reset password token " + e);
+        }
+
+    }
+    private PasswordResetToken createPasswordResetToken(User user){
+        String token = UUID.randomUUID().toString();
+        return PasswordResetToken
+                .builder()
+                .token(token)
+                .user(user)
+                .expiryDate(new Date(System.currentTimeMillis() + 60*60*1000))
+                .build();
+    }
+    private String urlGenerator(String token){
+        return path + "resetpassword?token="+token;
     }
 }
