@@ -3,10 +3,13 @@ package com.ilyaproject.smart_menu_server.service;
 import com.ilyaproject.smart_menu_server.config.details.CustomUserDetails;
 import com.ilyaproject.smart_menu_server.dto.profile.ProfileInformationRequestDTO;
 import com.ilyaproject.smart_menu_server.exception.ProfileException;
+import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
+import com.ilyaproject.smart_menu_server.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 public class ProfileInformationService  {
     private final UserRepository repository;
+    private final UserUtils utils;
     @Transactional
     public void updateProfileInformation(@RequestBody @Valid ProfileInformationRequestDTO information,
                                             Authentication authentication) throws Exception{
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        var userId = userDetails.getUser().getId();
-        var user = repository.findById(userId)
-                .orElseThrow(() -> new ProfileException("User not found"));
+        User user = utils.getUserByAuthentication(authentication);
         try {
             var profileInfo = user.getProfileInformation();
             profileInfo.setActivity(information.getActivity());
@@ -37,6 +38,26 @@ public class ProfileInformationService  {
         }catch (Exception e){
             log.error(e.toString());
             throw new ProfileException("Failed to update profile");
+        }
+    }
+
+    @Cacheable(value = "profiles", key = "#authentication.name")
+    public ProfileInformationRequestDTO getProfileInformation(Authentication authentication) throws Exception{
+        User user = utils.getUserByAuthentication(authentication);
+        try {
+            var profileInfo = user.getProfileInformation();
+            return ProfileInformationRequestDTO
+                    .builder()
+                    .sex(profileInfo.getSex())
+                    .age(profileInfo.getAge())
+                    .activity(profileInfo.getActivity())
+                    .goals(profileInfo.getGoals())
+                    .height(profileInfo.getHeight())
+                    .weight(profileInfo.getWeight())
+                    .build();
+        }catch (Exception e){
+            log.error("Failed to get profile information ", e);
+            throw new ProfileException("Failed to get profile information ", e);
         }
     }
 }

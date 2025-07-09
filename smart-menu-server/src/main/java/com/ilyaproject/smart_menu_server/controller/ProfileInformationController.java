@@ -31,4 +31,15 @@ public class ProfileInformationController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/get")
+    public ResponseEntity<?> getProfileInformation(Authentication authentication){
+        try {
+            ProfileInformationRequestDTO profileInformation = service.getProfileInformation(authentication);
+            GeneralResponse<ProfileInformationRequestDTO> response = new GeneralResponse<>(true, profileInformation);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            GeneralResponse<ProfileInformationRequestDTO> response = new GeneralResponse<>(false, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
