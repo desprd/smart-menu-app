@@ -10,7 +10,6 @@ import type { MenuSettingsResponse } from "../types/settings";
 import Loading from "./Loading";
 
 const Recipes: React.FC = () => {
-  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
@@ -107,12 +106,6 @@ const Recipes: React.FC = () => {
                 needs and taste preferences.
               </p>
             </div>
-
-            {errorMessage && (
-              <div className="text-red-600 text-sm font-medium px-2 md:px-0 pt-2">
-                {errorMessage}
-              </div>
-            )}
             {successMessage && (
               <div className="text-green-600 text-sm font-medium px-2 md:px-0 pt-2">
                 {successMessage}

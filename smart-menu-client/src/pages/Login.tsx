@@ -30,6 +30,7 @@ function Login() {
         setErrorMessage(response.data.errorMessage);
       }
     } catch (error) {
+      setErrorMessage("Failed to login");
       console.error("Login error", error);
     }
   };

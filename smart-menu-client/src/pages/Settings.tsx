@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import SubmitButton from "../components/SubmitButton";
 import FormInput from "../components/FormInput";
+import axios from "axios";
+import type { UpdateResponse } from "../types/update";
 
 const Settings: React.FC = () => {
+  const [successMessage, setSuccessMessage] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem("token");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (password.length < 6) {
       setErrorMessage("Password supposed to be at least 6 characters long");
       return;
@@ -16,7 +21,32 @@ const Settings: React.FC = () => {
       setErrorMessage("Please enter a valid email address");
       return;
     }
-    console.log("Changed:", { email, password });
+    try {
+      const response = await axios.put<UpdateResponse>(
+        `${API_URL}/credentials/change`,
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        console.log(response.data.content.message);
+        setSuccessMessage("Credentials updated successfully");
+      } else {
+        if (response.data.errorMessage != null) {
+          console.error(response.data.errorMessage);
+          setErrorMessage(response.data.errorMessage);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Failed to change your credentials");
+    }
   };
   return (
     <div className="relative flex min-h-screen flex-col bg-white group/design-root overflow-x-hidden font-lexend">
@@ -37,6 +67,11 @@ const Settings: React.FC = () => {
             {errorMessage && (
               <div className="text-red-600 text-sm font-medium px-2 md:px-0 pt-2">
                 {errorMessage}
+              </div>
+            )}
+            {successMessage && (
+              <div className="text-green-600 text-sm font-medium px-2 md:px-0 pt-2">
+                {successMessage}
               </div>
             )}
             <FormInput
