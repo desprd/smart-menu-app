@@ -23,7 +23,7 @@ public class MenuController {
     @GetMapping("/init")
     public ResponseEntity<?> initialMenuGeneration(Authentication authentication){
         try {
-            service.initialMenuGeneration(authentication);
+            service.menuGeneration(authentication);
             UpdateResponseDTO update = new UpdateResponseDTO("Menu instance was created successfully");
             GeneralResponse<UpdateResponseDTO> response = new GeneralResponse<>(true, update);
             return new ResponseEntity<>(response, HttpStatus.OK);

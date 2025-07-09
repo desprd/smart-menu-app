@@ -36,7 +36,7 @@ public class MenuService {
     private final EntityToDTO etd;
     private final MealRepository mealRepository;
     @Transactional
-    public void initialMenuGeneration(Authentication authentication) throws Exception{
+    public void menuGeneration(Authentication authentication) throws Exception{
         try {
             User user = utils.getUserByAuthentication(authentication);
             RecipesDTO recipesdto = generator.generate(user).get();

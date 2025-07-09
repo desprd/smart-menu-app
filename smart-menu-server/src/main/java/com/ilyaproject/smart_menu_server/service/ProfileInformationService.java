@@ -9,6 +9,7 @@ import com.ilyaproject.smart_menu_server.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class ProfileInformationService  {
     private final UserRepository repository;
     private final UserUtils utils;
     @Transactional
+    @CacheEvict(cacheNames = "profiles", key = "#authentication.name")
     public void updateProfileInformation(@RequestBody @Valid ProfileInformationRequestDTO information,
                                             Authentication authentication) throws Exception{
         User user = utils.getUserByAuthentication(authentication);
