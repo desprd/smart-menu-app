@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CreateProfilePage from "./pages/CreateProfilePage";
 import CreateRecipesPage from "./pages/CreateRecipesPage";
 import Recipe from "./pages/Recipe";
+import TokenRoute from "./components/TokenRoute";
 
 function App() {
   return (
@@ -88,7 +89,14 @@ function App() {
             }
           ></Route>
           <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
-          <Route path="/resetpassword" element={<ResetPassword />}></Route>
+          <Route
+            path="/resetpassword"
+            element={
+              <TokenRoute>
+                <ResetPassword />
+              </TokenRoute>
+            }
+          ></Route>
         </Routes>
       </BrowserRouter>
     </div>
