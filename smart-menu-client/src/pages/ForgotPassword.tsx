@@ -1,22 +1,39 @@
 import React, { useState } from "react";
 import InputField from "../components/InputField";
-
+import type { ValidateResponse } from "../types/validate";
 import Header from "../components/Header";
+import axios from "axios";
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSucceeded, setIsSucceeded] = useState<boolean>(true);
   const [attempted, setAttempted] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  const handleSending = () => {
+  const handleSending = async () => {
     if (!email.includes("@") || !email.includes(".")) {
       setErrorMessage("Please enter a valid email address");
       return;
     }
-    setErrorMessage("");
-    setAttempted(true);
-    //TODO api call and set isSucceeded depends on if reset link was sended or not
+    try {
+      const response = await axios.post<ValidateResponse>(
+        `${API_URL}/credentials/sendlink`,
+        { email }
+      );
+      if (response.data.success) {
+        setAttempted(true);
+        setIsSucceeded(true);
+      } else {
+        console.error(response.data.errorMessage);
+        setAttempted(true);
+        setIsSucceeded(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setAttempted(true);
+      setIsSucceeded(false);
+    }
   };
 
   return (
@@ -50,7 +67,7 @@ const ForgotPassword: React.FC = () => {
           <div className="px-2 py-3">
             <button
               onClick={handleSending}
-              className="w-full bg-[#38e07b] h-12 rounded-xl text-base font-bold tracking-wide text-[#111714]"
+              className="cursor-pointer w-full bg-[#38e07b] h-12 rounded-xl text-base font-bold tracking-wide text-[#111714]"
             >
               Send a reset link
             </button>
