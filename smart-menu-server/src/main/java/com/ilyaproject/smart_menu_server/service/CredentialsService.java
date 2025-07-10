@@ -3,6 +3,7 @@ package com.ilyaproject.smart_menu_server.service;
 import com.ilyaproject.smart_menu_server.dto.credentials.ChangeCredentialsDTO;
 import com.ilyaproject.smart_menu_server.email.sender.PasswordResetTokenEmailSender;
 import com.ilyaproject.smart_menu_server.exception.AuthException;
+import com.ilyaproject.smart_menu_server.exception.ProfileException;
 import com.ilyaproject.smart_menu_server.exception.ResetPasswordTokenException;
 import com.ilyaproject.smart_menu_server.model.PasswordResetToken;
 import com.ilyaproject.smart_menu_server.model.User;
@@ -66,6 +67,23 @@ public class CredentialsService {
         }
         if (isTokenExpired(resetToken)){
             throw new ResetPasswordTokenException("Token is expired");
+        }
+    }
+
+    public void resetPassword(String token, String password) throws Exception{
+        PasswordResetToken resetToken = tokenRepository.findByToken(token).orElseThrow(() -> new ResetPasswordTokenException("Failed to fined token "));
+        if (resetToken == null){
+            throw new ResetPasswordTokenException("Token object is empty");
+        }
+        User user = resetToken.getUser();
+        if (user == null){
+            throw new ResetPasswordTokenException("Failed to fetch user from token");
+        }
+        try {
+            user.setPassword(encoder.encode(password));
+            repository.save(user);
+        }catch (Exception e){
+            throw new CredentialException("Failed to save user with new password " + e);
         }
     }
 

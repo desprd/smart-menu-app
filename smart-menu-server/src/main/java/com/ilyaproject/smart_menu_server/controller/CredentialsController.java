@@ -2,6 +2,7 @@ package com.ilyaproject.smart_menu_server.controller;
 
 import com.ilyaproject.smart_menu_server.dto.auth.TokenDTO;
 import com.ilyaproject.smart_menu_server.dto.credentials.ChangeCredentialsDTO;
+import com.ilyaproject.smart_menu_server.dto.credentials.ResetPasswordRequestDTO;
 import com.ilyaproject.smart_menu_server.dto.email.EmailDTO;
 import com.ilyaproject.smart_menu_server.dto.general.*;
 import com.ilyaproject.smart_menu_server.service.CredentialsService;
@@ -54,6 +55,19 @@ public class CredentialsController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             GeneralResponse<ValidationResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/resetpassword")
+    public ResponseEntity<?> resetPassword(@RequestBody @Valid ResetPasswordRequestDTO req){
+        try {
+            service.resetPassword(req.getToken(), req.getPassword());
+            UpdateResponseDTO update = new UpdateResponseDTO("Users password updated successfully");
+            GeneralResponse<UpdateResponseDTO> response = new GeneralResponse<>(true, update);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            GeneralResponse<UpdateResponseDTO> response = new GeneralResponse<>(false, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
