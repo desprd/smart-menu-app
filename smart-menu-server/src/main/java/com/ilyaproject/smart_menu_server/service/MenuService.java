@@ -19,7 +19,10 @@ import com.ilyaproject.smart_menu_server.utils.EntityToDTO;
 import com.ilyaproject.smart_menu_server.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,6 +105,25 @@ public class MenuService {
         }catch (Exception e){
             log.error("Failed to create MealFullInformation ", e);
             throw new MenuException("Failed to create MealFullInformation ", e);
+        }
+    }
+
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "meals", allEntries = true),
+            @CacheEvict(cacheNames = "recipes", allEntries = true)
+    })
+    public void weeklyMenuGeneration(User user) throws Exception{
+        try {
+            RecipesDTO recipesdto = generator.generate(user).get();
+            Recipes recipes = dte.mapRecipesDTOToEntity(recipesdto);
+            String cleanEmail = cleaner.cleanEmail(user.getEmail());
+            user.setRecipes(recipes);
+            repository.save(user);
+            sender.sendRecipesInPdfEmail(cleanEmail, recipesdto);
+        }catch (Exception e){
+            log.error("Failed to generate weekly menu", e);
+            throw new GenerationException("Failed to generate weekly menu", e);
         }
     }
 }

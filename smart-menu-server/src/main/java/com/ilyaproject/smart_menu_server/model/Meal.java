@@ -17,6 +17,7 @@ public class Meal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String recipeText;
     @ElementCollection
     private List<String> ingredients;
