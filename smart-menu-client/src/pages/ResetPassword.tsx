@@ -30,6 +30,7 @@ const ResetPassword: React.FC = () => {
         { token, password }
       );
       if (response.data.success) {
+        setErrorMessage("");
         setIsUpdated(true);
         navidate("/login");
       } else {

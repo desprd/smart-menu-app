@@ -22,6 +22,7 @@ const ForgotPassword: React.FC = () => {
         { email }
       );
       if (response.data.success) {
+        setErrorMessage("");
         setAttempted(true);
         setIsSucceeded(true);
       } else {

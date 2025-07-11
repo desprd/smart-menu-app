@@ -35,6 +35,7 @@ const Settings: React.FC = () => {
         }
       );
       if (response.data.success) {
+        setErrorMessage("");
         console.log(response.data.content.message);
         setSuccessMessage("Credentials updated successfully");
       } else {
