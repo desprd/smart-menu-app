@@ -2,6 +2,8 @@ package com.ilyaproject.smart_menu_server;
 
 import com.ilyaproject.smart_menu_server.dto.menu.json.RecipesDTO;
 import com.ilyaproject.smart_menu_server.email.generator.html.RecipeHtmlGenerator;
+import com.ilyaproject.smart_menu_server.email.generator.pdf.PdfGenerator;
+import com.ilyaproject.smart_menu_server.email.sender.RecipesInPdfEmailSender;
 import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
 import com.ilyaproject.smart_menu_server.utils.EntityToDTO;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,7 +28,12 @@ class RecipeHtmlGeneratorIntegrationTest {
     private RecipeHtmlGenerator recipeHtmlGenerator;
 
     @Autowired
-    private UserRepository repository; // or your service that loads RecipesDTO
+    private UserRepository repository;
+
+    @Autowired
+    private PdfGenerator generator;
+    @Autowired
+    private RecipesInPdfEmailSender sender;
 
     @Test
     @Transactional
@@ -34,13 +43,12 @@ class RecipeHtmlGeneratorIntegrationTest {
                 .orElseThrow(() -> new RuntimeException("Recipe not found"));
         RecipesDTO recipe = etd.mapRecipesEntityToDTO(user.getRecipes());
 
-        // When
-        List<String> htmlList = recipeHtmlGenerator.generateListOfRecipesHtml(recipe);
+        try {
+            sender.sendRecipesInPdfEmail(user.getEmail(), recipe);
+        }catch (Exception e){
+            System.out.println(e);
+        }
 
-        htmlList.forEach(System.out::println);
-
-        // Then
-        assertFalse(htmlList.isEmpty());
 
     }
 }
