@@ -11,6 +11,7 @@ import com.ilyaproject.smart_menu_server.model.ProfileInformation;
 import com.ilyaproject.smart_menu_server.model.Role;
 import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
+import com.ilyaproject.smart_menu_server.utils.Cleaner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,7 @@ public class AuthenticationService {
     private final PasswordEncoder encoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final Cleaner cleaner;
     @Transactional
     public AuthResponseDTO signUp(SignUpRequestDTO req) throws Exception{
         String username = req.getUsername();
@@ -58,7 +60,7 @@ public class AuthenticationService {
             var user = User
                     .builder()
                     .username(username)
-                    .email(email)
+                    .email(cleaner.cleanEmail(email))
                     .role(Role.USER)
                     .password(encoder.encode(req.getPassword()))
                     .profileInformation(profileInfo)
@@ -82,7 +84,7 @@ public class AuthenticationService {
         try {
             authentication =authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
-                req.getEmail(),
+                cleaner.cleanEmail(req.getEmail()),
                 req.getPassword()
               )
             );

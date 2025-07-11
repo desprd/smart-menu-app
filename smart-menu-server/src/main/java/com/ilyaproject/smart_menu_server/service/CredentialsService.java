@@ -9,6 +9,7 @@ import com.ilyaproject.smart_menu_server.model.PasswordResetToken;
 import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.repository.PasswordResetTokenRepository;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
+import com.ilyaproject.smart_menu_server.utils.Cleaner;
 import com.ilyaproject.smart_menu_server.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +32,13 @@ public class CredentialsService {
     private final PasswordEncoder encoder;
     private final PasswordResetTokenRepository tokenRepository;
     private final PasswordResetTokenEmailSender sender;
+    private final Cleaner cleaner;
     @Value("${url.path}")
     private String path;
     public void changeCredentials(ChangeCredentialsDTO req, Authentication authentication) throws Exception{
         User user = utils.getUserByAuthentication(authentication);
         try {
-            user.setEmail(req.getEmail());
+            user.setEmail(cleaner.cleanEmail(req.getEmail()));
             user.setPassword(encoder.encode(req.getPassword()));
             repository.save(user);
         }catch (Exception e){
@@ -46,13 +48,14 @@ public class CredentialsService {
     }
 
     public void sendLinkToChangePassword(String email) throws Exception{
-        User user = repository.findByEmail(email).orElseThrow(() -> new AuthException("Failed to find user by email"));
+        String cleanEmail = cleaner.cleanEmail(email);
+        User user = repository.findByEmail(cleanEmail).orElseThrow(() -> new AuthException("Failed to find user by email"));
         try {
             deleteTokenIfExists(user.getId());
             PasswordResetToken resetToken = createPasswordResetToken(user);
             tokenRepository.save(resetToken);
             String url = urlGenerator(resetToken.getToken());
-            sender.sendPasswordResetTokenEmail(url, email);
+            sender.sendPasswordResetTokenEmail(url, cleanEmail);
         }catch (Exception e){
             log.error("Failed to send link with reset password token " + e);
             throw new CredentialException("Failed to send link with reset password token " + e);

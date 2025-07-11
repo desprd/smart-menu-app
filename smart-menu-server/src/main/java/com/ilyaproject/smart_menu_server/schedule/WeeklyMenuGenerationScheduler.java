@@ -17,7 +17,7 @@ import java.util.List;
 public class WeeklyMenuGenerationScheduler {
     private final UserRepository userRepository;
     private final MenuService service;
-    @Scheduled(cron = "0 16 00 * * *", zone = "Europe/Warsaw")
+    @Scheduled(cron = "0 0 5 * * MON", zone = "Europe/Warsaw")
     public void sendWeeklyMenuToAllUsers(){
         List<User> users = userRepository.findAllWithAllRelations();
         for (User user: users){

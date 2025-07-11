@@ -108,7 +108,7 @@ public class MenuService {
         }
     }
 
-    @Transactional
+    @Async("taskExecutor")
     @Caching(evict = {
             @CacheEvict(cacheNames = "meals", allEntries = true),
             @CacheEvict(cacheNames = "recipes", allEntries = true)
