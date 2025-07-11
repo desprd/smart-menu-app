@@ -1,7 +1,13 @@
 import React from "react";
 import Header from "../components/Header";
+import { useAuth } from "../context/ContextProvider";
+import WeeklyMenu from "./WeeklyMenu";
 
 function About() {
+  const { username } = useAuth();
+  if (username != null) {
+    return <WeeklyMenu />;
+  }
   return (
     <div className="min-h-screen bg-white text-[#111714] font-lexend">
       <Header pageName="About" />

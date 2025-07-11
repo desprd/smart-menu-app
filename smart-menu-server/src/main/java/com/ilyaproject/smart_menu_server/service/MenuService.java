@@ -48,7 +48,6 @@ public class MenuService {
             String cleanEmail = cleaner.cleanEmail(user.getEmail());
             user.setRecipes(recipes);
             repository.save(user);
-            log.info("Sending email to cleaned: '{}'", cleanEmail);
             sender.sendRecipesInPdfEmail(cleanEmail, recipesdto);
         }catch (Exception e){
             log.error("Failed to generate menu", e);
