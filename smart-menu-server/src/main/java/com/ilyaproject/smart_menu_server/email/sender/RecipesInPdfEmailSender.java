@@ -17,7 +17,7 @@ public class RecipesInPdfEmailSender {
             MimeMessage message = generator.constructRecipesMessage(targetEmail, recipes);
             Transport.send(message);
         }catch (Exception e){
-            throw new EmailException("Failed to send email with menu.pdf in attachments");
+            throw new EmailException("Failed to send email with menu.pdf in attachments ", e);
         }
     }
 }

@@ -5,6 +5,7 @@ import com.ilyaproject.smart_menu_server.dto.menu.json.RecipesDTO;
 import com.ilyaproject.smart_menu_server.dto.menu.request.MealFullInformationDTO;
 import com.ilyaproject.smart_menu_server.dto.menu.request.MealShortInformationDTO;
 import com.ilyaproject.smart_menu_server.dto.menu.request.MenuPageDTO;
+import com.ilyaproject.smart_menu_server.email.sender.RecipesInPdfEmailSender;
 import com.ilyaproject.smart_menu_server.exception.GenerationException;
 import com.ilyaproject.smart_menu_server.exception.MenuException;
 import com.ilyaproject.smart_menu_server.model.Meal;
@@ -12,6 +13,7 @@ import com.ilyaproject.smart_menu_server.model.Recipes;
 import com.ilyaproject.smart_menu_server.model.User;
 import com.ilyaproject.smart_menu_server.repository.MealRepository;
 import com.ilyaproject.smart_menu_server.repository.UserRepository;
+import com.ilyaproject.smart_menu_server.utils.Cleaner;
 import com.ilyaproject.smart_menu_server.utils.DTOToEntity;
 import com.ilyaproject.smart_menu_server.utils.EntityToDTO;
 import com.ilyaproject.smart_menu_server.utils.UserUtils;
@@ -35,14 +37,19 @@ public class MenuService {
     private final DTOToEntity dte;
     private final EntityToDTO etd;
     private final MealRepository mealRepository;
+    private final RecipesInPdfEmailSender sender;
+    private final Cleaner cleaner;
     @Transactional
     public void menuGeneration(Authentication authentication) throws Exception{
         try {
             User user = utils.getUserByAuthentication(authentication);
             RecipesDTO recipesdto = generator.generate(user).get();
             Recipes recipes = dte.mapRecipesDTOToEntity(recipesdto);
+            String cleanEmail = cleaner.cleanEmail(user.getEmail());
             user.setRecipes(recipes);
             repository.save(user);
+            log.info("Sending email to cleaned: '{}'", cleanEmail);
+            sender.sendRecipesInPdfEmail(cleanEmail, recipesdto);
         }catch (Exception e){
             log.error("Failed to generate menu", e);
             throw new GenerationException("Failed to generate menu", e);
